@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 //import ReactDOM from 'react-dom';
 //import PropTypes from "prop-types";
 import $ from 'jquery'; 
@@ -14,14 +14,14 @@ const MovieSearch = () => {
 	const location = useLocation();
 	const { selectedUser } = location.state;
 
-	useEffect(() => {
-		$.ajax({
-			url: "http://localhost:8080/netflix/movie/fav/get/" + selectedUser.id
-		})
-		.then((response) =>
-			setFavMovies(response)
-		)
-	}, []);
+	// useEffect(() => {
+	// 	$.ajax({
+	// 		url: "http://localhost:8080/netflix/movie/fav/get/" + selectedUser.id
+	// 	})
+	// 	.then((response) =>
+	// 		setFavMovies(response)
+	// 	)
+	// }, []);
 
 	const handleTextBoxChanges = (event) => {
 		setSearchForName(event.target.value);
@@ -31,6 +31,13 @@ const MovieSearch = () => {
 		
 		event.preventDefault();
 		
+		$.ajax({
+			url: "http://localhost:8080/netflix/movie/fav/get/" + selectedUser.id
+		})
+		.then((response) =>
+			setFavMovies(response)
+		)
+
 		$.ajax({
 			url: "http://localhost:8080/netflix/movie/search/" + searchForName
 		})
@@ -42,8 +49,6 @@ const MovieSearch = () => {
 	return (
 		<div>
 			<h2>Hello, {selectedUser.firstName}!</h2>
-			<h3>{favMovies}</h3>
-
 			<form>
 				<label>
 					Search for Movie Name:&nbsp;
@@ -52,35 +57,83 @@ const MovieSearch = () => {
 				&nbsp;
 				<button onClick={handleButtonSearch}>Search</button>
 			</form>
-			<div id="result"></div>
-			<MovieList key={movies} movies={movies}/>
+			<MovieList key={movies} movies={movies} favMovies={favMovies} selectedUser={selectedUser} />
 		</div>
 	);
 }
 
 const MovieList = (props) => {
-	var movies = props.movies.map(movie =>
-		<Movie key={movie.imdb_id} movie={movie}/>
+	var movies = props.movies.map((movie) => 
+		<Movie key={movie.netflix_id} movie={movie} favMovies={props.favMovies} selectedUser={props.selectedUser} />
 	);
 	return (
+		<div>
 		<table>
 			<tbody>
 				{movies}
 			</tbody>
 		</table>
+		</div>
 	)
 }
 
 const Movie = (props) => {
+
+	var favMovies = Array.from(props.favMovies);
+	const [ exists, setExists ] = useState( favMovies.some(fav => fav.netflixId === props.movie.netflix_id) );
+	// const exists = favMovies.some(fav => fav.netflixId === props.movie.netflix_id)
+	var favData = { user: { id: props.selectedUser.id }, netflixId: props.movie.netflix_id, titleName: props.movie.title };
+	var favData2 = { user: { id: props.selectedUser.id }, netflixId: props.movie.netflix_id };
+
+	const handleButtonFav = (event) => {
+		
+		event.preventDefault();
+
+		if (exists) {
+			// alert("do remove ["+exists+"]");
+			$.ajax({
+				contentType: 'application/json',
+				url: "http://localhost:8080/netflix/movie/fav/remove",
+				data: JSON.stringify( favData2 ),
+				dataType: 'json',
+				type: 'DELETE'
+			})
+			.then((response) =>
+				alert(response)
+			)
+			.then(
+				setExists(false)
+			)
+			// alert("do remove end ["+exists+"]");
+		} else {
+			// alert("do add ["+exists+"]");
+			$.ajax({
+				contentType: 'application/json',
+				data: JSON.stringify( favData ),
+				dataType: 'json',
+				type: 'POST',
+				url: "http://localhost:8080/netflix/movie/fav/add"
+			})
+			// .then((response) =>
+				// setMovies(response)
+			// )
+			.then(
+				setExists(true)
+			)
+			// alert("do add ["+exists+"]");
+		}
+	}
+
 	return (
 		<tr>
 			<td>
 				<form>
+					<button onClick={handleButtonFav}>{exists?'Remove':'Add'}</button>
 				</form>
 			</td>
-			<td><img src={props.movie.img} alt={props.movie.title}  /></td>
+			<td><img src={props.movie.img} alt={props.movie.title} /></td>
 			<td>
-				<h3>{props.movie.title} ({props.movie.year})</h3>
+				<h3>{props.movie.title} ({props.movie.year})</h3> 
 				<br />
 				<p>{props.movie.synopsis}</p>
 			</td>
