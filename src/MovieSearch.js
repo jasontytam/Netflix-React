@@ -39,7 +39,7 @@ const MovieSearch = () => {
 		)
 
 		$.ajax({
-			url: "http://localhost:8080/netflix/movie/search/" + searchForName
+			url: "http://localhost:8080/netflix/movie/search/bytitlename/" + searchForName
 		})
 		.then((response) =>
 			setMovies(response)
