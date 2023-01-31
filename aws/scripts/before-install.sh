@@ -10,6 +10,7 @@ mkdir -vp /usr/local/codedeployresources
 
 if [ ! -d /usr/local/Netflix-React ]; then
   mkdir /usr/local/Netflix-React
+  mkdir /usr/local/Netflix-React/log
 else
   cd /usr/local/Netflix-React
 
@@ -17,10 +18,6 @@ else
     mkdir /usr/local/Netflix-React/backup
   fi
 
-  if [ ! -d /usr/local/Netflix-React/log ]; then
-    mkdir /usr/local/Netflix-React/log
-  fi
-  
   tar -czvf "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz" build
 
   rm -rf build
