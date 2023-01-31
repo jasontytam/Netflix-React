@@ -5,6 +5,8 @@ import $ from 'jquery';
 import {useLocation} from 'react-router-dom'
 // import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
+const baseUrl = "http://internal-Netflix-WS-ALB-1547091502.eu-west-2.elb.amazonaws.com:8080";
+
 
 const MovieSearch = () => {
 	const [ searchForName, setSearchForName ] = useState('');
@@ -13,15 +15,6 @@ const MovieSearch = () => {
 
 	const location = useLocation();
 	const { selectedUser } = location.state;
-
-	// useEffect(() => {
-	// 	$.ajax({
-	// 		url: "http://localhost:8080/netflix/movie/fav/get/" + selectedUser.id
-	// 	})
-	// 	.then((response) =>
-	// 		setFavMovies(response)
-	// 	)
-	// }, []);
 
 	const handleTextBoxChanges = (event) => {
 		setSearchForName(event.target.value);
@@ -32,14 +25,14 @@ const MovieSearch = () => {
 		event.preventDefault();
 		
 		$.ajax({
-			url: "http://localhost:8080/netflix/movie/fav/get/" + selectedUser.id
+			url: baseUrl + "/netflix/movie/fav/get/" + selectedUser.id
 		})
 		.then((response) =>
 			setFavMovies(response)
 		)
 
 		$.ajax({
-			url: "http://localhost:8080/netflix/movie/search/bytitlename/" + searchForName
+			url: baseUrl + "/netflix/movie/search/bytitlename/" + searchForName
 		})
 		.then((response) =>
 			setMovies(response)
@@ -93,7 +86,7 @@ const Movie = (props) => {
 			// alert("do remove ["+exists+"]");
 			$.ajax({
 				contentType: 'application/json',
-				url: "http://localhost:8080/netflix/movie/fav/remove",
+				url: baseUrl + "/netflix/movie/fav/remove",
 				data: JSON.stringify( favData2 ),
 				dataType: 'json',
 				type: 'DELETE'
@@ -112,7 +105,7 @@ const Movie = (props) => {
 				data: JSON.stringify( favData ),
 				dataType: 'json',
 				type: 'POST',
-				url: "http://localhost:8080/netflix/movie/fav/add"
+				url: baseUrl + "/netflix/movie/fav/add"
 			})
 			// .then((response) =>
 				// setMovies(response)

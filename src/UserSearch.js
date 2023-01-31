@@ -2,6 +2,8 @@ import React from 'react';
 import $ from 'jquery'; 
 import { NavLink } from 'react-router-dom';
 
+const baseUrl = "http://internal-Netflix-WS-ALB-1547091502.eu-west-2.elb.amazonaws.com:8080";
+
 
 class UserSearch extends React.Component { 
 
@@ -12,7 +14,7 @@ class UserSearch extends React.Component {
 
 	componentDidMount() { 
 		$.ajax({
-			url: "http://localhost:8080/netflix/user/get"
+			url: baseUrl + "/netflix/user/get"
 		})
 		.then((response) =>
 			this.setState({
