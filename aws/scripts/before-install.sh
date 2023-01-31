@@ -10,7 +10,6 @@ mkdir -vp /usr/local/codedeployresources
 
 if [ ! -d /usr/local/Netflix-React ]; then
   mkdir /usr/local/Netflix-React
-  mkdir /usr/local/Netflix-React/log
 else
   cd /usr/local/Netflix-React
 
@@ -23,6 +22,10 @@ else
   rm -rf build
   
   cd -
+fi
+
+if [ ! -d /usr/local/Netflix-React/log ]; then
+  mkdir /usr/local/Netflix-React/log
 fi
 
 
