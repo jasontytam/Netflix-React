@@ -50,7 +50,9 @@ jobs:
     
 #    - run: npm test
 
+    - run: tar -czvf build.tar.gz build
+
     - name: Upload Artifact to s3
       working-directory: .
-      run: aws s3 cp build s3://${{ env.S3BUCKET }}/ --recursive
+      run: aws s3 cp build.tar.gz s3://${{ env.S3BUCKET }}/
 
