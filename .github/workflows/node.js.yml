@@ -51,6 +51,6 @@ jobs:
 #    - run: npm test
 
     - name: Upload Artifact to s3
-      working-directory: build/libs
+      working-directory: .
       run: aws s3 cp build s3://${{ env.S3BUCKET }}/ --recursive
 
