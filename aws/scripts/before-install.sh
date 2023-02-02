@@ -17,7 +17,8 @@ else
     mkdir /usr/local/Netflix-React/backup
   fi
 
-  tar -czvf "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz" build
+  #tar -czvf "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz" build
+  mv build.tar.gz "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz"
 
   rm -rf build
   
