@@ -2,4 +2,4 @@
 set -xe
 
 cd /usr/local/Netflix-React/
-serve -s build > ./log/Netflix-React.$(date '+%Y%m%d_%H%M%S').log 2>&1 &
+serve -s build > ./log/Netflix-React.$(date '+%Y%m%d_%H%M%S').log &
