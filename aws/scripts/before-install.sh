@@ -18,9 +18,13 @@ else
   fi
 
   #tar -czvf "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz" build
-  mv build.tar.gz "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz"
+  if [ -f build.tar.gz ]; then
+    mv build.tar.gz "backup/build_$(date '+%Y%m%d_%H%M%S').tar.gz"
+  fi
 
-  rm -rf build
+  if [ -d build ]; then
+    rm -rf build
+  fi
   
   cd -
 fi
