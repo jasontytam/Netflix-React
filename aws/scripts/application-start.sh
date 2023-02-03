@@ -1,6 +1,7 @@
 #!/bin/bash
 #set -xe
 
+. "/root/.bashrc"
 whoami
 node --version
 npm --version
