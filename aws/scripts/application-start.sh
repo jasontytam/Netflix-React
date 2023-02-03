@@ -1,5 +1,5 @@
 #!/bin/bash
-set -xe
+#set -xe
 
 whoami
 node --version
